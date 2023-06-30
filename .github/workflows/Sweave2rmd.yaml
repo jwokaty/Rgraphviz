@@ -43,9 +43,10 @@ jobs:
                                      to = sub("rnw", "Rmd", x = fname, ignore.case = TRUE),
                                      validate = FALSE)
                      }, error = function(e) {
-                                msg <- print(paste(fname, "must be converted manually."))
+                                msg <- paste(fname, "must be converted manually.")
                      }
                    )
+                   print(msg)
                  }'
       - name: git add
         run: |
