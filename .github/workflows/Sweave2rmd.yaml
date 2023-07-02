@@ -34,21 +34,29 @@ jobs:
       - name: install Rnw2Rmd 
         run: Rscript -e "BiocManager::install('LiNk-NY/Rnw2Rmd')"
       - name: convert Rnw
-        run: |
-             R -e 'setwd("vignettes")
-                for (fname in list.files(path = ".", pattern = "\\.rnw$", ignore.case = TRUE)){
-                    msg <- ""
-                     tryCatch({
-              Rnw2Rmd::Rnw2Rmd(from = fname,
-                               to = sub("rnw", "Rmd", x = fname, ignore.case = TRUE),
-                               validate = FALSE)
-                          }, error = function(e) {
-                 msg <- paste(fname, "must be converted manually.")
-               print(paste("::error::", msg, sep = ""))
+        uses: actions/github-script@v5
+        with:
+         github-token: ${{ secrets.GITHUB_TOKEN }}
+         script: |
+           const fs = require('fs');
+            const { context } = require('@actions/github');
+
+            const files = fs.readdirSync('vignettes');
+            for (const file of files) {
+              if (file.match(/\.rnw$/i)) {
+              try {
+                 Rnw2Rmd::Rnw2Rmd(from = `vignettes/${file}`, to = `vignettes/${file.replace(/\.rnw$/i, '.Rmd')}`, validate = FALSE);
+               } catch (error) {
+                const message = `${file} must be converted manually.`;
+                 const commentBody = `::error::${message}`;
+            const issueComment = await context.octokit.issues.createComment({
+              ...context.repo,
+              issue_number: context.issue.number,
+              body: commentBody
+            });
              }
-             )
-             print(msg)
-                            }'
+           }
+              }
 
 
       - name: git add
