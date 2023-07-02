@@ -36,27 +36,28 @@ jobs:
       - name: convert Rnw
         uses: actions/github-script@v5
         with:
-         github-token: ${{ secrets.GITHUB_TOKEN }}
-         script: |
-           const fs = require('fs');
-            const { context } = require('@actions/github');
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+         const fs = require('fs');
+         const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
 
-            const files = fs.readdirSync('vignettes');
+          const files = fs.readdirSync('vignettes');
             for (const file of files) {
-              if (file.match(/\.rnw$/i)) {
-              try {
-                 Rnw2Rmd::Rnw2Rmd(from = `vignettes/${file}`, to = `vignettes/${file.replace(/\.rnw$/i, '.Rmd')}`, validate = FALSE);
-               } catch (error) {
-                const message = `${file} must be converted manually.`;
-                 const commentBody = `::error::${message}`;
-            const issueComment = await context.octokit.issues.createComment({
+            if (file.match(/\.rnw$/i)) {
+          try {
+            Rnw2Rmd::Rnw2Rmd(from = `vignettes/${file}`, to = `vignettes/${file.replace(/\.rnw$/i, '.Rmd')}`, validate = FALSE);
+          } catch (error) {
+            const message = `${file} must be converted manually.`;
+            const commentBody = `::error::${message}`;
+            const issueComment = await octokit.issues.createComment({
               ...context.repo,
               issue_number: context.issue.number,
               body: commentBody
             });
+          }
              }
            }
-              }
+
 
 
       - name: git add
