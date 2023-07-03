@@ -35,19 +35,22 @@ jobs:
         run: Rscript -e "BiocManager::install('LiNk-NY/Rnw2Rmd')"
       - name: convert Rnw
         run: |
-          R -e 'setwd("vignettes")
-                 for (fname in list.files(path = ".", pattern = "\\.rnw$", ignore.case = TRUE)){
-                  msg <- ""
-                  tryCatch({
-                    Rnw2Rmd::Rnw2Rmd(from = fname,
-                                     to = sub("rnw", "Rmd", x = fname, ignore.case = TRUE),
-                                     validate = FALSE)
-                     }, error = function(e) {
-                                msg <- paste(fname, "must be converted manually.")
-                     }
-                   )
-                   print(msg)
-                 }'
+             R -e 'setwd("vignettes")
+                for (fname in list.files(path = ".", pattern = "\\.rnw$", ignore.case = TRUE)){
+                    msg <- ""
+                     tryCatch({
+              Rnw2Rmd::Rnw2Rmd(from = fname,
+                               to = sub("rnw", "Rmd", x = fname, ignore.case = TRUE),
+                               validate = FALSE)
+                          }, error = function(e) {
+                 msg <- paste(fname, "must be converted manually.")
+               print(paste("::error::", msg, sep = ""))
+             }
+             )
+             print(msg)
+                            }'
+
+
       - name: git add
         run: |
           git config --global --add safe.directory /__w/$REPO_NAME/$REPO_NAME
@@ -59,3 +62,6 @@ jobs:
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
+        with:
+          branch: "sweave-conversion"
+          title: "Sweave Conversion Changes"
