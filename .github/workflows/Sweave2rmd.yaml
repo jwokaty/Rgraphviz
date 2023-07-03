@@ -44,9 +44,11 @@ jobs:
                                 validate = FALSE)
                           }, error = function(e) {
                                           msg <- paste(msg, fname, "must be converted manually.")
+                                          print("Inside the loop")
                              }
                              )
                      print(msg)
+                     print("Outside the loop")
                     }'
       - name: git add
         run: |
