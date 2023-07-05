@@ -44,7 +44,8 @@ jobs:
                                         to = sub("rnw", "Rmd", x = fname, ignore.case = TRUE),
                                         validate = FALSE)
                      }, error = function(e) {
-                       msg <- paste(msg, fname, "must be converted manually.", "Error:", e)
+                       #msg <- paste(msg, fname, "must be converted manually.", "Error:", e)
+                       print(paste("Error:", fname))
                      })
                    }
                    print(msg)
