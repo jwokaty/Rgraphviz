@@ -36,7 +36,7 @@ jobs:
       - name: convert Rnw
         run: |
              R -e 'setwd("vignettes")
-                   msg <- " "
+                   msg <- ""
                    for (fname in list.files(path = ".", pattern = "\\.rnw$", ignore.case = TRUE)) {
                      tryCatch({
                        print(paste("Converting", fname))
@@ -44,13 +44,12 @@ jobs:
                                         to = sub("rnw", "Rmd", x = fname, ignore.case = TRUE),
                                         validate = FALSE)
                      }, error = function(e) {
-                       #msg <- paste(msg, fname, "must be converted manually.", "Error:", e)
-                       print(paste("Error:", fname))
+                       msg <- paste(msg, fname, "must be converted manually.", sep=" ")
+                       print(paste("Error:", msg))
                      })
                    }
-                   print(msg)
-                   print("Outside the loop")
-                   '
+                   print(paste("Final Message:", msg))
+                  '
       - name: git add
         run: |
           git config --global --add safe.directory /__w/$REPO_NAME/$REPO_NAME
