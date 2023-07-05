@@ -36,19 +36,19 @@ jobs:
       - name: convert Rnw
         run: |
              R -e 'setwd("vignettes")
-                   msg <- ""
+                   msgs <- ""
                    for (fname in list.files(path = ".", pattern = "\\.rnw$", ignore.case = TRUE)) {
-                     tryCatch({
+                     msg <- tryCatch({
                        print(paste("Converting", fname))
                        Rnw2Rmd::Rnw2Rmd(from = fname,
                                         to = sub("rnw", "Rmd", x = fname, ignore.case = TRUE),
                                         validate = FALSE)
                      }, error = function(e) {
-                       msg <- paste(msg, fname, "must be converted manually.", sep=" ")
-                       print(paste("Error:", msg))
+                       return(paste(fname, "must be converted manually.", sep=" "))
                      })
+                     msgs <- paste(msgs, msg) 
                    }
-                   print(paste("Final Message:", msg))
+                   print(paste("Final Message:", msgs))
                   '
       - name: git add
         run: |
