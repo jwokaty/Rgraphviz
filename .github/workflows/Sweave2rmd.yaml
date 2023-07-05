@@ -49,7 +49,7 @@ jobs:
                      msgs <- paste(msgs, msg) 
                    }
                    print(msgs)
-                   cat(msgs, file="myfile.txt")'
+                   cat(msgs, file = "vignettes/myfile.txt")'
                    # cat myfile.txt >> "$GITHUB_OUTPUT"    
       - name: git add
         run: |
