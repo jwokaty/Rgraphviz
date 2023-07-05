@@ -39,16 +39,16 @@ jobs:
                    msgs <- ""
                    for (fname in list.files(path = ".", pattern = "\\.rnw$", ignore.case = TRUE)) {
                      msg <- tryCatch({
-                       print(paste("Converting", fname))
                        Rnw2Rmd::Rnw2Rmd(from = fname,
                                         to = sub("rnw", "Rmd", x = fname, ignore.case = TRUE),
                                         validate = FALSE)
+                       paste(fname, "converted.")
                      }, error = function(e) {
-                       return(paste(fname, "must be converted manually.", sep=" "))
+                       paste(fname, "must be converted manually.")
                      })
                      msgs <- paste(msgs, msg) 
                    }
-                   print(paste("Final Message:", msgs))
+                   print(msgs)
                   '
       - name: git add
         run: |
