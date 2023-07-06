@@ -65,7 +65,12 @@ jobs:
         with:
           branch: "sweave-conversion"
           title: "Sweave Conversion Changes"
-          body: |
-            const msgs = fs.readFileSync('msgfile.txt', 'utf8');
-            msgs
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const msgs = fs.readFileSync('msgfile.txt', 'utf8');
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: msgs
+            });
