@@ -24,6 +24,7 @@ jobs:
         run: Rscript -e "BiocManager::install('LiNk-NY/Rnw2Rmd')"
 
       - name: convert Rnw
+        id: conversion
         run: |
              R -e 'setwd("vignettes")
                    msgs <- ""
@@ -58,4 +59,4 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         with:
           title: "Sweave Conversion Changes"
-          body: ${{ steps.vars.outputs.results }}
+          body: ${{ steps.conversion.outputs.results }}
