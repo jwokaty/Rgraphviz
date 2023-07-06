@@ -59,7 +59,7 @@ jobs:
           git add *.Rmd
           git rm  *.Rnw
           msg=$(cat myfile.txt)
-          git commit -am $msg
+          git commit -am "$(cat vignettes/myfile.txt)"
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
