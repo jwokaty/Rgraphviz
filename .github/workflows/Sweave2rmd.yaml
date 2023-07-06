@@ -41,6 +41,7 @@ jobs:
                    }
                    cat(msgs, file="results.txt")'
              results=$(cat vignettes/results.txt)
+             rm vignettes/results.txt
              echo "results=$results" >> $GITHUB_OUTPUT
 
       - name: git add
@@ -52,8 +53,6 @@ jobs:
           git commit -m "Remove .Rnw files"
           git add *.Rmd
           git commit -m "Add .Rnw files"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
