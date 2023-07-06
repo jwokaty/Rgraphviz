@@ -46,10 +46,9 @@ jobs:
                      }, error = function(e) {
                        paste(fname, "must be converted manually.")
                      })
-                     msgs <- paste(msgs, msg) 
-                   }
-                   print(msgs)
-                   cat(msgs)'
+                     msgs <- c(msgs, msg)
+                }
+                cat(paste(msgs, collapse = "\n"))' > msgfile.txt
                    # cat myfile.txt >> "$GITHUB_OUTPUT"
       - name: git add
         run: |
@@ -66,12 +65,7 @@ jobs:
         with:
           branch: "sweave-conversion"
           title: "Sweave Conversion Changes"
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
+          body: |
             const msgs = fs.readFileSync('msgfile.txt', 'utf8');
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: msgs
-            });
+            msgs
+          github-token: ${{ secrets.GITHUB_TOKEN }}
