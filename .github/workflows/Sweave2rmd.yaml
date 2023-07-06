@@ -54,6 +54,7 @@ jobs:
       - name: git add
         run: |
           commit_msg=$(cat vignettes/results.txt)
+          echo $commit_msg
           git config --global --add safe.directory /__w/$REPO_NAME/$REPO_NAME
           git config user.name helpful-bot
           git config user.email github-actions@github.com
@@ -61,7 +62,6 @@ jobs:
           git commit -m "Remove .Rnw files"
           git add *.Rmd
           git commit -m commit_msg
-          git status
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Create Pull Request
