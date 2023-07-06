@@ -47,17 +47,19 @@ jobs:
                        paste(fname, "must be converted manually.")
                      })
                      msgs <- c(msgs, msg)
-                }
-                cat(paste(msgs, collapse = "\n"))' > msgfile.txt
-                   # cat myfile.txt >> "$GITHUB_OUTPUT"
+                   }
+                   cat(msgs, file="results.txt")
+                  '
+                  # cat result.txt.txt >> "$GITHUB_OUTPUT"
       - name: git add
         run: |
+          commit_msg=$(cat vignettes/results.txt)
           git config --global --add safe.directory /__w/$REPO_NAME/$REPO_NAME
           git config user.name helpful-bot
           git config user.email github-actions@github.com
           git add *.Rmd
           git rm  *.Rnw
-          
+          git commit -m commit_msg
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Create Pull Request
