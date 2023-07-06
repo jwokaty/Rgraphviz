@@ -49,8 +49,8 @@ jobs:
                      msgs <- paste(msgs, msg) 
                    }
                    print(msgs)
-                   cat(msgs, file = "vignettes/myfile.txt")'
-                   # cat myfile.txt >> "$GITHUB_OUTPUT"    
+                   cat(msgs)'
+                   # cat myfile.txt >> "$GITHUB_OUTPUT"
       - name: git add
         run: |
           git config --global --add safe.directory /__w/$REPO_NAME/$REPO_NAME
@@ -58,11 +58,20 @@ jobs:
           git config user.email github-actions@github.com
           git add *.Rmd
           git rm  *.Rnw
-          msg=$(cat myfile.txt)
-          git commit -am "$(cat vignettes/myfile.txt)"
-
+          
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
           branch: "sweave-conversion"
           title: "Sweave Conversion Changes"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const msgs = fs.readFileSync('msgfile.txt', 'utf8');
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: msgs
+            });
