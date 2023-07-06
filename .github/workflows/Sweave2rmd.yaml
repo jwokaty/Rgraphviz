@@ -47,7 +47,6 @@ jobs:
           git config --global --add safe.directory /__w/$REPO_NAME/$REPO_NAME
           git config user.name helpful-bot
           git config user.email github-actions@github.com
-          git switch -C sweave-conversion
           git rm  *.Rnw
           git commit -m "Remove .Rnw files"
           git add *.Rmd
@@ -58,6 +57,5 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
-          branch: "sweave-conversion"
           title: "Sweave Conversion Changes"
           body: ${{ steps.vars.outputs.results }}
