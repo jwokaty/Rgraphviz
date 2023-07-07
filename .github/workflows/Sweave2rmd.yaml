@@ -52,7 +52,7 @@ jobs:
           git rm  *.Rnw
           git commit -m "Remove .Rnw files"
           git add *.Rmd
-          git commit -m "Add .Rnw files"
+          git commit -m "Add .Rmd files"
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
